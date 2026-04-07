@@ -67,7 +67,7 @@ namespace OrderApi.BackgroundServices
                 _logger.LogInformation($"Order işlendi: {createOrderEvent.Id}");
             };
 
-            channel.BasicConsume(QueueNameConstants.CreateOrder, autoAck: false, consumer);
+            channel.BasicConsume(QueueNameConstants.CreateOrder, autoAck: true, consumer);
 
             return Task.CompletedTask;
         }
