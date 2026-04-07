@@ -48,7 +48,7 @@ namespace OrderApi.BackgroundServices
                     return;
                 }
 
-                var order = db.Orders.Find(createOrderEvent.Id);
+                var order = await db.Orders.FindAsync(createOrderEvent.Id);
                 
                 if (order == null)
                 {
@@ -56,13 +56,13 @@ namespace OrderApi.BackgroundServices
                     return;
                 }
 
-                order.Status = OrderStatus.Processing;                
-                db.SaveChanges();
+                order.Status = OrderStatus.Processing;
+                await db.SaveChangesAsync();
 
                 await Task.Delay(2000); // simulate processing
 
                 order.Status = OrderStatus.Completed;               
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 _logger.LogInformation($"Order işlendi: {createOrderEvent.Id}");
             };
