@@ -26,6 +26,8 @@ namespace OrderApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetOrderResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetOrder([FromRoute] Guid id)
         {
             Order order = await _dbContext.Orders.FindAsync(id);
@@ -46,7 +48,12 @@ namespace OrderApi.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// TO DO Pagination eklenebilir
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(List<QueryOrderResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> QueryOrders()
         {
             List<QueryOrderResponse> orders = await _dbContext.Orders.Select(x => new QueryOrderResponse
@@ -61,6 +68,8 @@ namespace OrderApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(CreateOrderResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {
             var validationResult = _validator.Validate(request);
